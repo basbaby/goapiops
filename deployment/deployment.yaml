@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: goapiops
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      name: goapiops
+  template:
+    metadata:
+      labels:
+        name: goapiops
+    spec:
+      containers:
+      - image: kiranbabycontainerreg.azurecr.io/kiranbabycontainerrepo:goapiops
+        name: kiranbabycontainerreg
+        ports:
+          - containerPort: 8081
+      imagePullSecrets: 
+      - name: goapiopssecret
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: goapiops-service
+spec:
+  type: LoadBalancer
+  selector:
+    name: goapiops
+  ports:
+  - name: http  
+    port: 80
+    targetPort: 8081
